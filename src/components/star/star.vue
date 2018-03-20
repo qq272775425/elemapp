@@ -56,7 +56,7 @@ export default {
 	@import "../../common/stylus/mixin"
 	.star
 		font-size:0
-		&.star-48自动匹配样式
+		&.star-48/* 自动匹配样式 */
 			.star-item
 				width: 20px
 				height: 20px
