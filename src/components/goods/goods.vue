@@ -1,15 +1,15 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuwraper">
 		<ul>
-			<li v-for="item in goods" class="menu-item">
+			<li v-for="(item,index) in goods" class="menu-item" ref="current" :class="{'current':currentIndex == index}" @click="getIndex(index)">
 				<span class="text" border-1px><span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{ item.name }}</span>
 			</li>
 		</ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodswraper">
 		<ul>
-			<li class="food-list" v-for="item in goods">
+			<li class="food-list food-list-hook" v-for="item in goods">
 				<h1 class="title">{{ item.name }}</h1>
 				<ul>
 					<li v-for="food in item.foods" class="food-item border-1px">
@@ -35,24 +35,75 @@
 </template>
 
 <script>
+	import BScroll from "better-scroll";
 export default {
   name: 'goods',
   data () {
     return {
-     goods:[]
-    }
+     goods:[],
+     listheight:[],
+     scrollY: 0
+    };
   },
   props:['seller'],
+  computed:{
+
+  	currentIndex(){
+  		for(let i = 0; i < this.listheight.length; i++){
+  			let height1 = this.listheight[i];
+  			let height2 = this.listheight[i+1];
+  			if(!height2 || (this.scrollY >= height1 && this.scrollY < height2)){
+  				return i;
+  			}
+  		};
+  		return 0; 		
+  	},
+  },
+
+  methods:{
+  	
+  	_initScroll(){
+  		this.menuScroll = new BScroll(this.$refs.menuwraper,{click:true});
+  		this.foodScroll = new BScroll(this.$refs.foodswraper,{probeType:3});
+  		this.foodScroll.on('scroll',(pos) => {
+  			this.scrollY = Math.abs(Math.round(pos.y));
+  			// console.log(this.scrollY);
+  			if(this.scrollY!==0){console.log(this.currentIndex)}
+  		});
+  	},
+
+  	_getheight(){//获取高度
+  		let foodlist = this.$refs.foodswraper.getElementsByClassName('food-list-hook');
+  		let height  = 0;
+  		this.listheight.push(height);
+  		for(let i = 0; i < foodlist.length; i++){
+  			let item = foodlist[i];
+  			height += item.clientHeight;
+  			this.listheight.push(height);
+  		}
+  	},
+  	getIndex(index){
+  		console.log(index);
+  		let foodlist = this.$refs.foodswraper.getElementsByClassName('food-list-hook');
+  		let el = foodlist[index];
+  		this.foodScroll.scrollToElement(el,500)
+  	}
+
+  },
   created(){
     this.$axios.get('/api/goods')
     .then((res) => {
       res = res.data;
-      console.log("goods当前信息状态码: "+res.errno)
+      /*console.log("goods当前信息状态码: "+res.errno)*/
       /*console.log(res)*/
       if(res.errno == 0){//自定义的errno的值 判断数据的状态码是否正确
-          this.goods = res.data
+          this.goods = res.data;
+          this.$nextTick(()=>{
+          	this._initScroll();
+          	this._getheight();
+          }); 
       }
-      console.log(this.goods);
+      /*console.log(this.goods);*/
     })
     .catch((error) => {
       console.log(error);
@@ -82,13 +133,22 @@ export default {
 				width:56px
 				line-height:16px
 				padding-left:14px
+				&.current
+					width:65px
+					z-index:10
+					position:relative
+					margin-top: -1px
+					background:#fff
+					font-weight:700
+					.text
+						border-none()
 				.icon
 					display: inline-block
 					vertical-align: top
 					width: 12px
 					height: 12px
 					margin-right: 2px
-					margin-top: 1px
+					margin-top: 2px
 					background-size: 12px 12px 
 					background-repeat: no-repeat
 					&.decrease
@@ -104,6 +164,7 @@ export default {
 				.text
 					display:table-cell
 					width:56px
+					text-align:center
 					vertical-align:middle
 					border-1px(rgba(7,17,27,0.1))
 					font-size:12px
@@ -137,31 +198,36 @@ export default {
 					.name
 						display: inline-block;
 						height:14px
-						margin:2px 0 8px 0px
+						margin:2px 0 6px 0px
 						font-size:14px
 						color:rgb(7,17,27)
 						line-height:14px
 						height:14px
 					.desc, .extra
-						
-						line-height:10px
+
+						line-height:14px
 						font-size:10px
 						color:rgb(147,153,159)
 					.desc
+						display: inline-block
 						margin-bottom:8px
 					.extra
 						line-height:10px
 						.count
 							margin-right:1px
+
 					.price
 						font-weight:700
 						line-height:24px
+						margin-top:6px
+
 						.now
 							margin-right:8px
-							font-size:14px
+							font-size:16px
 							color:rgb(240,20,20)
 						.old
 							text-secoration: line-through
 							font-size: 10px
 							color:rgb(147,153,159)
+							text-decoration:line-through
 </style>
