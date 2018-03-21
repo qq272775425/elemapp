@@ -25,19 +25,15 @@ export default {
   name: 'App',
   data() {
     return {
-      seller:{}
+      seller:{},
     }
   },
   created(){
-    this.$axios.get('/api/seller'/*,{
-        params:{
-          type:""
-          count:
-        }
-      }*/)
+    this.$axios.get('/api/seller')
     .then((res) => {
       res = res.data;
-      console.log("当前信息状态码: "+res.errno)
+      console.log("seller当前信息状态码: "+res.errno)
+      console.log(res)
       if(res.errno == 0){//自定义的errno的值 判断数据的状态码是否正确
           this.seller = res.data
       }
