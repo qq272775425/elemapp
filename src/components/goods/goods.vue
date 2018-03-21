@@ -31,13 +31,18 @@
 			</li>
 		</ul>
     </div>
+    <shopcar :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
 	import BScroll from "better-scroll";
+	import shopcar from "../shopcar/shopcar";
 export default {
   name: 'goods',
+  components:{
+  	shopcar
+  },
   data () {
     return {
      goods:[],
