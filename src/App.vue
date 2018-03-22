@@ -32,15 +32,15 @@ export default {
     this.$axios.get('/api/seller')
     .then((res) => {
       res = res.data;
-      console.log("seller当前信息状态码: "+res.errno)
-      console.log(res)
+      // console.log("seller当前信息状态码: "+res.errno)
+      // console.log(res)
       if(res.errno == 0){//自定义的errno的值 判断数据的状态码是否正确
           this.seller = res.data
       }
-      console.log(this.seller);
+      // console.log(this.seller);
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     })
   },
   components:{

@@ -25,23 +25,29 @@
 								<span class="now">$ {{ food.price }}</span>
 								<span class="old" v-show="food.oldPrice">$ {{ food.oldPrice }}</span>
 							</div>
+							<div class="cartcontrol-wrapper">
+								<cartcontrol :food="food"></cartcontrol>
+							</div>	
 						</div>
 					</li>
 				</ul>
 			</li>
 		</ul>
     </div>
-    <shopcar :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcar>
+    <shopcar :selectFoods="selectFoods" :select-foods="selectFoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
-	import BScroll from "better-scroll";
-	import shopcar from "../shopcar/shopcar";
+
+	import BScroll from "better-scroll"
+	import shopcar from "../shopcar/shopcar"
+	import cartcontrol from "../cartcontrol/cartcontrol"
 export default {
   name: 'goods',
   components:{
-  	shopcar
+  	shopcar,
+  	cartcontrol,
   },
   data () {
     return {
@@ -63,13 +69,24 @@ export default {
   		};
   		return 0; 		
   	},
+  	selectFoods(){
+  		let foods = []
+  		this.goods.forEach((good) => {
+  			good.foods.forEach((food) => {
+  				if(food.count){
+  					foods.push(food)
+  				}
+  			})
+  		})
+  		return foods
+  	}
   },
 
   methods:{
   	
   	_initScroll(){
   		this.menuScroll = new BScroll(this.$refs.menuwraper,{click:true});
-  		this.foodScroll = new BScroll(this.$refs.foodswraper,{probeType:3});
+  		this.foodScroll = new BScroll(this.$refs.foodswraper,{click:true,probeType:3});
   		this.foodScroll.on('scroll',(pos) => {
   			this.scrollY = Math.abs(Math.round(pos.y));
   			// console.log(this.scrollY);
@@ -235,4 +252,8 @@ export default {
 							font-size: 10px
 							color:rgb(147,153,159)
 							text-decoration:line-through
+					.cartcontrol-wrapper
+						position: absolute
+						right:0
+						bottom:12px
 </style>
