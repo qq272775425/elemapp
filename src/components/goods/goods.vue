@@ -9,10 +9,10 @@
     </div>
     <div class="foods-wrapper" ref="foodswraper">
 		<ul>
-			<li class="food-list food-list-hook" v-for="item in goods">
+			<li  class="food-list food-list-hook" v-for="item in goods">
 				<h1 class="title">{{ item.name }}</h1>
 				<ul>
-					<li v-for="food in item.foods" class="food-item border-1px">
+					<li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
 						<div class="icon"><img :src="food.icon" height="70px" width="70px"></div>
 						<div class="content">
 							<h2 class="name">{{ food.name }}</h2>
@@ -34,8 +34,10 @@
 			</li>
 		</ul>
     </div>
-    <shopcar :selectFoods="selectFoods" :select-foods="selectFoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcar>
+    <shopcar :selectFoods="selectFoods" :deliveryprice="seller.deliveryPrice" :minprice="seller.minPrice"></shopcar>
+  <food :food="selectedFood" ref="food"></food>
   </div>
+  
 </template>
 
 <script>
@@ -43,17 +45,21 @@
 	import BScroll from "better-scroll"
 	import shopcar from "../shopcar/shopcar"
 	import cartcontrol from "../cartcontrol/cartcontrol"
+	import food from "../food/food"
+
 export default {
   name: 'goods',
   components:{
   	shopcar,
   	cartcontrol,
+  	food
   },
   data () {
     return {
      goods:[],
      listheight:[],
-     scrollY: 0
+     scrollY: 0,
+     selectedFood:{}
     };
   },
   props:['seller'],
@@ -90,7 +96,7 @@ export default {
   		this.foodScroll.on('scroll',(pos) => {
   			this.scrollY = Math.abs(Math.round(pos.y));
   			// console.log(this.scrollY);
-  			if(this.scrollY!==0){console.log(this.currentIndex)}
+  			// if(this.scrollY!==0){console.log(this.currentIndex)} 索引验证
   		});
   	},
 
@@ -105,10 +111,18 @@ export default {
   		}
   	},
   	getIndex(index){
-  		console.log(index);
+  		// console.log(index);
   		let foodlist = this.$refs.foodswraper.getElementsByClassName('food-list-hook');
   		let el = foodlist[index];
   		this.foodScroll.scrollToElement(el,500)
+  	},
+  	selectFood(food,event){
+  		if(!event._constructed){
+  			return
+  		}
+  		this.selectedFood = food
+  		this.$refs.food.show()
+  		console.log(this.$refs.food)
   	}
 
   },
@@ -252,8 +266,10 @@ export default {
 							font-size: 10px
 							color:rgb(147,153,159)
 							text-decoration:line-through
+							font-style:italic
 					.cartcontrol-wrapper
 						position: absolute
 						right:0
 						bottom:12px
+						z-index: 100;
 </style>
