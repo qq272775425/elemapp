@@ -6,7 +6,7 @@
 		<span @click="select(0,$event)" class="block positive" :class="{'active':selectType===0}">{{ desc.positive }}<span class="count">{{ positives.length }}</span></span>
 		<span @click="select(1,$event)" class="block negative" :class="{'active':selectType===1}">{{ desc.negative }}<span class="count">{{ negatives.length }}</span></span>
     </div>
-    <div @click="toogle($event)" class="switch" :class="{'on':onlyContent}">
+    <div @click="toogle($event)" class="switch" :class="{'on':onlyContent===true}">
 		<span class="icon-check_circle"></span>
 		<span class="text">只看有内容评价</span>
     </div>
@@ -23,12 +23,12 @@ export default {
   data () {
     return {
      	selectType:{
-		type: Number,
-		default: ALL
-  	},
-  	onlyContent:{
+		    type: Number,
+		    default: ALL
+  	  },
+  	  onlyContent:{
   		type:Boolean,
-  		default:false
+  		default: false
   	},
     }
   },
@@ -45,10 +45,10 @@ export default {
   	}
   },
   methods:{
-  	select(type,event){
-  		if(!event._constructed){
-  			return
-  		}
+    	select(type,event){
+    		if(!event._constructed){
+    			return
+    		}
   		this.selectType = type
   		this.$emit('ratingtypeselect',type)
   	},
@@ -122,13 +122,13 @@ export default {
 			&.on
 				.icon-check_circle
 					color: #00c850;
-			.icon-check_circle
-				display: inline-block;
-				margin-right: 4px;
-				font-size: 24px;
-			.text
-				font-size: 12px;
-				vertical-align: top;
+		  .icon-check_circle
+			  display: inline-block;
+			  margin-right: 4px;
+			  font-size: 24px;
+		  .text
+			  font-size: 12px;
+			  vertical-align: top;
 
 
 

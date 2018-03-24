@@ -22,8 +22,8 @@
 								<span>好评率{{ food.rating }}%</span>
 							</div>
 							<div class="price">
-								<span class="now">$ {{ food.price }}</span>
-								<span class="old" v-show="food.oldPrice">$ {{ food.oldPrice }}</span>
+								<span class="now">￥ {{ food.price }}</span>
+								<span class="old" v-show="food.oldPrice">￥ {{ food.oldPrice }}</span>
 							</div>
 							<div class="cartcontrol-wrapper">
 								<cartcontrol :food="food"></cartcontrol>
@@ -258,7 +258,7 @@ export default {
 						margin-top:6px
 
 						.now
-							margin-right:8px
+							margin-right:4px
 							font-size:16px
 							color:rgb(240,20,20)
 						.old

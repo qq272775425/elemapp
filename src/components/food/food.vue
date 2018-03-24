@@ -15,8 +15,8 @@
 						<span class="sell-count">月售{{ food.sellCount }}</span>
 						<span class="rating">好评率{{ food.rating }}%</span>
 						<div class="price">
-							<span class="now">￥ {{ food.price }}</span>
-							<span class="old" v-show="food.oldPrice">$ {{ food.oldPrice }}</span>
+							<span class="now">￥{{ food.price }}</span>
+							<span class="old" v-show="food.oldPrice">￥ {{ food.oldPrice }}</span>
 						</div>	
 					</div>
 					<div class="cartcontrol-wrapper">
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-	import {formatDate} from '../../common/js/date.js'
+	import {formatDate} from "../../common/js/date"
 	const POSITIVE = 0
     const NEGATIVE = 1
     const ALL = 2
@@ -82,7 +82,7 @@ export default {
 
   	}
   },
-  data () {
+  data (){
     return {
      showFlag:false,
      selectType:ALL,
@@ -103,9 +103,6 @@ export default {
   	food:{
   		type:Object
   	}
-  },
-  events:{
-  	
   },
   methods:{
   	ratingtypeselect(type){
