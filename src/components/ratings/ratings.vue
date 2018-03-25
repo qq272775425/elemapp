@@ -36,7 +36,7 @@
 		</ratingselect>
 		<div class="rating-wrapper">
 			<ul>
-				<li class="rating-item" v-for="rating in ratings" v-show="needShow(rating.rateType,rating.text)">
+				<li class="rating-item border-1px" v-for="rating in ratings" v-show="needShow(rating.rateType,rating.text)">
 					<div class="avatar" >
 						<img :src="rating.avatar" width="28px" height="28px">
 					</div>
@@ -68,6 +68,7 @@
 	import star from '../star/star'
 	import split from '../split/split'
 	import ratingselect from "../ratingselect/ratingselect"
+	import shopcar from "../shopcar/shopcar"
 	const ALL = 2
 
 export default {
@@ -99,7 +100,8 @@ export default {
   components:{
   	star,
   	split,
-  	ratingselect
+  	ratingselect,
+  	shopcar
   },
   props:{
   	seller:{
@@ -123,10 +125,13 @@ export default {
      	}) 
     .catch((error) => {
       console.log(error);
-    });
+    })
   	},
+
+
   data () {
     return {
+    	goods:[],
     	ratings:[],
     	showFlag:false,
     	selectType:ALL,
@@ -139,6 +144,19 @@ export default {
   		return formatDate(date,"yyyy-MM-dd hh:mm")
 
   	}
+  },
+  computed:{
+  	selectFoods(){
+  		let foods = []
+  		this.goods.forEach((good) => {
+  			good.foods.forEach((food) => {
+  				if(food.count){
+  					foods.push(food)
+  				}
+  			})
+  		})
+  		return foods
+  	}
   }
 }
 </script>
@@ -149,10 +167,13 @@ export default {
  	.ratings
  		position: absolute;
  		top: 174px;
- 		bottom: 0;
+ 		bottom: 0px;
  		width: 100%;
  		left: 0;
  		overflow: hidden;
+ 		.shopcar
+ 			height: 200px;
+ 			z-index: 99999;
  		.overview
  			display: flex;
  			padding: 18px 0;
@@ -241,7 +262,9 @@ export default {
 	 		.rating-item
 	 			display flex
 	 			padding 18px 0 
-				border-1px(rgba(7,17,27,.5))
+	 			border-bottom 1px solid rgba(7,17,27,0.2)
+				&:last-child
+					border-none()
 				.avatar
 					flex 0 0 28px
 					width 28px

@@ -163,7 +163,7 @@ export default {
 		position:fixed
 		left:0
 		bottom:0
-		z-index:100
+		z-index:999
 		height:48px
 		width:100%
 		font-size:0	
